@@ -50,10 +50,12 @@ public class Copy {
             progress.quit();
          }
          
-         try {
-            ShortcutFactory.createDesktopShortcut(dir + item.getExeLoc(), item.toString() + ".lnk");
-         } catch(Exception e) {
-            System.out.println("Tried to make a shortcut but failed??" + e);
+         if(item.getType() == 0) {
+            try {
+               ShortcutFactory.createDesktopShortcut(dir + item.getExeLoc(), item.toString() + ".lnk");
+            } catch(Exception e) {
+               System.out.println("Tried to make a shortcut but failed??" + e);
+            }
          }
       }).start();
    }
