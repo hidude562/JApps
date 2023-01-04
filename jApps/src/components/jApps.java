@@ -2,9 +2,12 @@ package components;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 // TODO: Add uninstall feature
 // TODO: Network download if usb not detected
@@ -20,6 +23,7 @@ public class jApps extends JPanel
     private final JCheckBox showApps  = new JCheckBox("Display Apps", true);
     private final JCheckBox showRoms  = new JCheckBox("Display ROMS", true);
     private final JCheckBox showOther = new JCheckBox("Display 'Other'", true);
+    private final JTextField search;
     
     // TODO: Test if the USB letter is the same on other school laptops
     private final String usbName = "D:/";
@@ -30,6 +34,7 @@ public class jApps extends JPanel
     private static final String installString = "Install";
 
     public jApps() {
+        // TODO: Clean up the constructor
         super(new BorderLayout());
          
         updateList();
@@ -44,6 +49,8 @@ public class jApps extends JPanel
         JScrollPane listScrollPane = new JScrollPane(list);
 
         JButton installButton = new JButton(installString);
+        search = new JTextField();
+
         InstallListener installListener = new InstallListener(installButton);
         installButton.setActionCommand(installString);
         installButton.addActionListener(installListener);
@@ -52,6 +59,11 @@ public class jApps extends JPanel
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane,
                                            BoxLayout.LINE_AXIS));
+        JLabel searchText = new JLabel("Search");
+        searchText.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+        searchText.setBorder(new EmptyBorder(0,0,0,5));
+        buttonPane.add(searchText);
+        buttonPane.add(search);
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
         buttonPane.add(Box.createHorizontalStrut(5));
@@ -88,6 +100,8 @@ public class jApps extends JPanel
         showApps.addActionListener(showListener);
         showRoms.addActionListener(showListener);
         showOther.addActionListener(showListener);
+
+        search.getDocument().addDocumentListener(new SearchListener());
         
         
         add(listScrollPane, BorderLayout.CENTER);
@@ -98,31 +112,20 @@ public class jApps extends JPanel
     }
 
     private final ActionListener showListener = new ActionListener() {
-      public void actionPerformed(ActionEvent actionEvent) {
-        // TODO: remove reduntant items
-
-        // Remove elements in listModel that do not follow the checkboxes criteria
-
-        for(int i = 0; i < listModel.size(); i++) {
-            byte type = ((Item) tempList.get(i)).getType();
-            listModel.set(i, tempList.get(i));
-            if(type == 0) {
-               if(!showApps.isSelected()) {
-                  listModel.set(i, new Item("", "", "", 0.0f, ""));
-               }
-            } else if(type == 1) {
-               if(!showRoms.isSelected()) {
-                  listModel.set(i, new Item("", "", "", 0.0f, ""));
-               }
-            } else if(type == 2) {
-               if(!showOther.isSelected()) {
-                  listModel.set(i, new Item("", "", "", 0.0f, ""));
-               }
-            }
-
+        public void actionPerformed(ActionEvent actionEvent) {
+            sortList();
         }
-      }
     };
+
+    class SearchListener implements DocumentListener {
+        public void insertUpdate(DocumentEvent e) {
+            sortList();
+        }
+        public void removeUpdate(DocumentEvent e) {
+            sortList();
+        }
+        public void changedUpdate(DocumentEvent e) {}
+    }
 
     //This listener is shared by the text field and the install butlton.
     class InstallListener implements ActionListener, DocumentListener {
@@ -158,23 +161,23 @@ public class jApps extends JPanel
         public void changedUpdate(DocumentEvent e) {}
 
     }
-    
-    public boolean confirmDownload(Item item) {
+
+    private boolean confirmDownload(Item item) {
          String info = "You are going to install: " + item + "\n\nInfo:\nFile Size: " + item.prettyFileSize() + "\nETA: " + item.eta();
          int quit;
          quit = JOptionPane.showOptionDialog(null, info, item.toString(), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
          return quit == 0;
     }
-    
-    public void updateDescription() {
+
+    private void updateDescription() {
       // Updates the description when the selection is changed on the list
       title.setText(list.getSelectedValue().toString());
       
       Item desc = (Item) (list.getSelectedValue());
       description.setText("<html><p style=\"width:250px\">" + desc.getDescription() + "<br><br></p></html>");
     }
-    
-    public void updateList() {
+
+    private void updateList() {
         // TODO: Load from JSON file in the future
         // Loads list items
         listModel = new DefaultListModel();
@@ -184,11 +187,10 @@ public class jApps extends JPanel
         listModel.addElement(new Item("RetroArch", usbName, "RetroArch.zip", 273f, "/RetroArch/RetroArch-Win64/retroarch.exe", "With this software, you can emulate a lot of consoles, like the NES, PS1, and even the 3DS."));
         listModel.addElement(new Item("Notepad++", usbName, "Notepad++.zip", 3.1f, "/Notepad++/notepad++.exe", "Notepad, but better"));
         listModel.addElement(new Item("Vim", usbName, "Vim.zip", 19f, "/Vim/vim90/vim.exe", "Notepad, but for smart people"));
-        
-        // TODO: Change directories to be correct
+
         listModel.addElement(new Item("Process Explorer", usbName, "Process Explorer.zip", 3.1f, "/Process Explorer/procexp64.exe", "Pretty much just Task Manager"));
         listModel.addElement(new Item("InteliJ", usbName, "InteliJ.zip", 830f, "/JetBrains/bin/idea64.exe", "A Java IDE by the company 'JetBrains'"));
-        listModel.addElement(new Item("PyCharm", usbName, "PyCharm.zip", 565f, "/Process Explorer/procexp64.exe", "A Python IDE by the company 'JetBrains' (IMPORTANT) You need to install Python from here for this to work!"));
+        listModel.addElement(new Item("PyCharm", usbName, "PyCharm.zip", 565f, "/JetBrains/bin/idea64.exe", "A Python IDE by the company 'JetBrains' (IMPORTANT) You need to install Python from here for this to work!"));
         listModel.addElement(new Item((byte) 2, "Python", usbName, "Python3.10.zip", 14.5f, "You either love it or hate it, Python, (Version 3.10). You need this for Pycharm since the auto-installer will not work. Also installing libraries is really difficult since not only is pip not automatically installed. Not only that but also the package distrubution site is blocked!", "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps//"));
         
         listModel.addElement(new Item("Dolphin", usbName, "Dolphin-x64.zip", 42.4f, "/Dolphin-x64/Dolphin.exe", "A Nintendo Wii emulator, (IMPORTANT) This does not include any games! There are several games listed here and you can also find the files online.\n\nTo install games, open the app, and click 'Open'. Then navigate to your game file and select it. Then just click the icon and press 'Play' on the menu."));
@@ -199,8 +201,39 @@ public class jApps extends JPanel
         }
     }
 
+    private void sortList() {
+        // Remove elements in listModel that do not follow the checkboxes criteria
+        listModel.removeAllElements();
+
+        for (int i = 0; i < tempList.size(); i++) {
+            Item currentItem = ((Item) tempList.get(i));
+            byte type = currentItem.getType();
+
+            // Check if search query is in the current item
+            if(currentItem.toString().toUpperCase().contains(search.getText().toUpperCase())) {
+                if (type == 0) {
+                    if (showApps.isSelected()) {
+                        listModel.addElement(currentItem);
+                    }
+                } else if (type == 1) {
+                    if (showRoms.isSelected()) {
+                        listModel.addElement(currentItem);
+                    }
+                } else if (type == 2) {
+                    if (showOther.isSelected()) {
+                        listModel.addElement(currentItem);
+                    }
+                }
+            }
+
+        }
+    }
+
     public void valueChanged(ListSelectionEvent e) {
-      updateDescription();
+        // TODO: Stop double-updating the description
+        try {
+            updateDescription();
+        } catch(Exception err) {}
     }
 
     // Create GUI
