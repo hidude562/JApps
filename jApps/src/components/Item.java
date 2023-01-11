@@ -7,7 +7,7 @@ public class Item {
    private String zipName;
    private String exeLoc;
    private String description;
-   private String installLoc = "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps//";
+   private String installLoc = "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/";
    
    // stores if it is a program, game iso, or something else
    private byte type;

@@ -38,13 +38,9 @@ public class Copy {
          String msg = unzip(zipLoc, dir);
          
          if(msg.equals("")) {
-            System.out.println("Showing 'Done!'");
             progress.quit();
             JOptionPane.showMessageDialog(null, "Done!");
          } else {
-            //
-            System.out.println("Showing error");
-            
             progress.setToDone();
             JOptionPane.showMessageDialog(null, msg, null, JOptionPane.ERROR_MESSAGE);
             progress.quit();
@@ -53,6 +49,10 @@ public class Copy {
          if(item.getType() == 0) {
             try {
                ShortcutFactory.createDesktopShortcut(dir + item.getExeLoc(), item.toString() + ".lnk");
+               // Run the app once finished
+               System.out.println(dir + item.getExeLoc());
+               ProcessBuilder movieProcess = new ProcessBuilder(dir + item.getExeLoc());
+               movieProcess.start();
             } catch(Exception e) {
                System.out.println("Tried to make a shortcut but failed??" + e);
             }

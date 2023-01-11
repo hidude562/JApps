@@ -191,10 +191,12 @@ public class jApps extends JPanel
         listModel.addElement(new Item("Process Explorer", usbName, "Process Explorer.zip", 3.1f, "/Process Explorer/procexp64.exe", "Pretty much just Task Manager"));
         listModel.addElement(new Item("InteliJ", usbName, "InteliJ.zip", 830f, "/JetBrains/bin/idea64.exe", "A Java IDE by the company 'JetBrains'"));
         listModel.addElement(new Item("PyCharm", usbName, "PyCharm.zip", 565f, "/JetBrains/bin/idea64.exe", "A Python IDE by the company 'JetBrains' (IMPORTANT) You need to install Python from here for this to work!"));
-        listModel.addElement(new Item((byte) 2, "Python", usbName, "Python3.10.zip", 14.5f, "You either love it or hate it, Python, (Version 3.10). You need this for Pycharm since the auto-installer will not work. Also installing libraries is really difficult since not only is pip not automatically installed. Not only that but also the package distrubution site is blocked!", "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps//"));
+        listModel.addElement(new Item((byte) 2, "Python", usbName, "Python3.10.zip", 14.5f, "You either love it or hate it, Python, (Version 3.10). You need this for Pycharm since the auto-installer will not work. Also installing libraries is really difficult since not only is pip not automatically installed. Not only that but also the package distrubution site is blocked!", "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/"));
         
         listModel.addElement(new Item("Dolphin", usbName, "Dolphin-x64.zip", 42.4f, "/Dolphin-x64/Dolphin.exe", "A Nintendo Wii emulator, (IMPORTANT) This does not include any games! There are several games listed here and you can also find the files online.\n\nTo install games, open the app, and click 'Open'. Then navigate to your game file and select it. Then just click the icon and press 'Play' on the menu."));
-        listModel.addElement(new Item((byte) 1, "Mario Kart Wii", usbName, "MarioKartWii.zip", 2210f, "(IMPORTANT) You must already have installed Dolphin for this to work (Look at the description for dolphin to see how to use this game file)! Mario Kart Wii, a racing game for the Wii", ""));
+        
+        // TODO: "Invalid compression method"
+        listModel.addElement(new Item((byte) 1, "Mario Kart Wii", usbName, "MarioKartWii.zip", 2210f, "(IMPORTANT) You must already have installed Dolphin for this to work (Look at the description for dolphin to see how to use this game file)! Mario Kart Wii, a racing game for the Wii", "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/Dolphin/Dolphin-x64/!!!!!!!!!!!GAMES!!!!!!!!!!/"));
 
         for(int i = 0; i < listModel.size(); i++) {
             tempList.addElement(listModel.get(i));
