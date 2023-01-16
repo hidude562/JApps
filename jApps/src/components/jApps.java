@@ -20,12 +20,13 @@ public class jApps extends JPanel
     private final JLabel title;
     private final JLabel description;
     
+    // TODO: Checkbox for network/USB downloads
+    
     private final JCheckBox showApps  = new JCheckBox("Display Apps", true);
     private final JCheckBox showRoms  = new JCheckBox("Display ROMS", true);
     private final JCheckBox showOther = new JCheckBox("Display 'Other'", true);
     private final JTextField search;
     
-    // TODO: Test if the USB letter is the same on other school laptops
     private final String usbName = "D:/";
     
     //Create and set up the window.
@@ -194,10 +195,13 @@ public class jApps extends JPanel
         listModel.addElement(new Item((byte) 2, "Python", usbName, "Python3.10.zip", 14.5f, "You either love it or hate it, Python, (Version 3.10). You need this for Pycharm since the auto-installer will not work. Also installing libraries is really difficult since not only is pip not automatically installed. Not only that but also the package distrubution site is blocked!", "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/"));
         
         listModel.addElement(new Item("Dolphin", usbName, "Dolphin-x64.zip", 42.4f, "/Dolphin-x64/Dolphin.exe", "A Nintendo Wii emulator, (IMPORTANT) This does not include any games! There are several games listed here and you can also find the files online.\n\nTo install games, open the app, and click 'Open'. Then navigate to your game file and select it. Then just click the icon and press 'Play' on the menu."));
+        listModel.addElement(new Item("Rollercoaster Tycoon 2", usbName, "RCT2.zip", 42.4f, "/openrct2.exe", "Build rollercoasters and stuff."));
         
         // TODO: "Invalid compression method"
         listModel.addElement(new Item((byte) 1, "Mario Kart Wii", usbName, "MarioKartWii.zip", 2210f, "(IMPORTANT) You must already have installed Dolphin for this to work (Look at the description for dolphin to see how to use this game file)! Mario Kart Wii, a racing game for the Wii", "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/Dolphin/Dolphin-x64/!!!!!!!!!!!GAMES!!!!!!!!!!/"));
-
+        listModel.addElement(new Item("JRuler", "https://drive.google.com/uc?export=download&id=1SDAzFry_VPn_Fh_GAMnlYTG9fwkwHzBz", "JRuler.zip", 0.1f, "/JRuler/JRuler.exe", "A test for online downloads"));
+        
+        
         for(int i = 0; i < listModel.size(); i++) {
             tempList.addElement(listModel.get(i));
         }

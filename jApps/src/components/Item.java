@@ -1,5 +1,7 @@
 package components;
 
+// TODO: Abstract class
+
 public class Item {
    private String displayName;
    private String dir;
@@ -8,6 +10,9 @@ public class Item {
    private String exeLoc;
    private String description;
    private String installLoc = "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/";
+   private boolean networkDownload = false;
+   private boolean usbDownload = true;
+   private String urlDownload = "";
    
    // stores if it is a program, game iso, or something else
    private byte type;
@@ -15,17 +20,6 @@ public class Item {
    // type = 0: Application type
    // type = 1: Roms files
    // type = 2: non-runnable application
-   
-   
-   public Item(String displayName, String dir, String zipName, float fileSize, String exeLoc) {
-      this.displayName = displayName;
-      this.dir = dir;
-      this.zipName = zipName;
-      this.fileSizeMB = fileSize;
-      this.exeLoc = exeLoc;
-      this.description = "(No description)";
-      this.type = 0;
-   }
    
    public Item(String displayName, String dir, String zipName, float fileSize, String exeLoc, String description) {
       this.displayName = displayName;
@@ -35,6 +29,7 @@ public class Item {
       this.exeLoc = exeLoc;
       this.description = description;
       this.type = 0;
+      autoDetect();
    }
    
    
@@ -53,10 +48,39 @@ public class Item {
       if(type == 1) {
          this.installLoc = "C:/Users/nathan.mills/Desktop/Games/";
       }
+      autoDetect();
+   }
+   
+   
+   public Item(String displayName, String networkDir, String dir, String zipName, float fileSize, String exeLoc, String description) {
+      this.displayName = displayName;
+      this.dir = dir;
+      this.zipName = zipName;
+      this.fileSizeMB = fileSize;
+      this.exeLoc = exeLoc;
+      this.description = description;
+      this.type = 0;
+      autoDetect();
+   }
+   
+   
+   private void autoDetect() {
+      if(dir.length() > 4) {
+         if(dir.substring(0, 4).equals("http")) {
+            networkDownload = true;
+            usbDownload = false;
+            urlDownload = dir;
+            dir = "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/";
+            zipName = "temp.zip";
+         }
+      }
    }
    
    public float getFileSize() {
       return fileSizeMB;
+   }
+   public boolean getIfNetworkDownload() {
+      return networkDownload;
    }
    
    public String getExeLoc() {
@@ -69,6 +93,10 @@ public class Item {
    
    public byte getType() {
       return type;
+   }
+   
+   public String getURL() {
+      return urlDownload;
    }
    
    public String prettyFileSize() {

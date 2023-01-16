@@ -18,7 +18,11 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import vbs_sc.ShortcutFactory;
-
+import java.net.URL;
+import java.io.InputStream;
+import java.nio.file.StandardCopyOption;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.Channels;
 
 public class Copy {
    private Item item;
@@ -32,10 +36,47 @@ public class Copy {
       progress.progressBar();
       
       new Thread(() -> {
-         // Unzip the zip
-         String zipLoc = item.getDirectory() + item.getZipName();
+         boolean tempZipCreated = false;
          
-         String msg = unzip(zipLoc, dir);
+         // TODO: Split network download and usb download into seperate methods
+         
+         if(item.getIfNetworkDownload()) {
+            tempZipCreated = true;
+            System.out.println("HTTPS:");
+            try {
+               URL website = new URL(item.getURL());
+               ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+               FileOutputStream fos = new FileOutputStream(item.getDirectory() + "temp.zip");
+               fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+               fos.close();
+            }
+            catch(IOException e) {
+               System.out.println(e);
+            }
+         }
+         
+         
+         
+         String zipLoc = item.getDirectory() + item.getZipName();
+         System.out.println(zipLoc);
+         String msg = "";
+         
+         // Check if it is a zip
+         if(zipLoc.substring(zipLoc.length() - 3, zipLoc.length()).equals("zip")) {
+            System.out.println("Unzipped!");
+            msg = unzip(zipLoc, dir);
+         } else {
+            // TODO for files that aren't a zip
+         }
+         
+         // If a temporary zip is downloaded in the process, delete it here
+         if(tempZipCreated) {
+            try {
+               Files.delete(((new File(zipLoc)).toPath()));
+            } catch(IOException e) {
+               System.out.println(e);
+            }
+         }
          
          if(msg.equals("")) {
             progress.quit();
