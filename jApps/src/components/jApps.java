@@ -175,18 +175,19 @@ public class jApps extends JPanel
       title.setText(list.getSelectedValue().toString());
       
       Item desc = (Item) (list.getSelectedValue());
-      description.setText("<html><p style=\"width:250px\">" + desc.getDescription() + "<br><br></p></html>");
+      description.setText("<html><p style=\"width:250px\">" + desc.getDescription() + "<br><br>" + "<b style=" + (desc.getIfNetworkDownload() ? "\"color: blue\">Network download avaiable!" : "\"color: #BBBBFF\">No network download..") + "</b><br>" + "<b style=" + (desc.getIfUsbDownload() ? "\"color: red\">USB download avaiable!" : "\"color: #FFBBBB\">No usb download..") + "</b>" + "</b>" + "<br><br> " + "</p></html>");
     }
 
     private void updateList() {
         // TODO: Load from JSON file in the future
+        // TODO: Add network downloads for pre-existing items
         // Loads list items
         listModel = new DefaultListModel();
         tempList = new DefaultListModel();
         listModel.addElement(new Item("Blender", usbName, "Blender.zip", 293.5f, "/Blender/blender.exe", "A 3d modeling software"));
         listModel.addElement(new Item("UnCiv", usbName, "UnCiv.zip", 85.24f, "/UnCiv/Unciv.exe", "A civilization building game, similar to the game Civilization 5, if you had heard of that game before. "));
         listModel.addElement(new Item("RetroArch", usbName, "RetroArch.zip", 273f, "/RetroArch/RetroArch-Win64/retroarch.exe", "With this software, you can emulate a lot of consoles, like the NES, PS1, and even the 3DS."));
-        listModel.addElement(new Item("Notepad++", usbName, "Notepad++.zip", 3.1f, "/Notepad++/notepad++.exe", "Notepad, but better"));
+        listModel.addElement(new Item("Notepad++", "https://drive.google.com/uc?export=download&id=1HtVgcJAj2KOPVdm3RSZcwogp7oKIVTma", usbName, "Notepad++.zip", 3.1f, "/Notepad++/notepad++.exe", "Notepad, but better"));
         listModel.addElement(new Item("Vim", usbName, "Vim.zip", 19f, "/Vim/vim90/vim.exe", "Notepad, but for smart people"));
 
         listModel.addElement(new Item("Process Explorer", usbName, "Process Explorer.zip", 3.1f, "/Process Explorer/procexp64.exe", "Pretty much just Task Manager"));
@@ -199,7 +200,11 @@ public class jApps extends JPanel
         
         // TODO: "Invalid compression method"
         listModel.addElement(new Item((byte) 1, "Mario Kart Wii", usbName, "MarioKartWii.zip", 2210f, "(IMPORTANT) You must already have installed Dolphin for this to work (Look at the description for dolphin to see how to use this game file)! Mario Kart Wii, a racing game for the Wii", "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/Dolphin/Dolphin-x64/!!!!!!!!!!!GAMES!!!!!!!!!!/"));
-        listModel.addElement(new Item("JRuler", "https://drive.google.com/uc?export=download&id=1SDAzFry_VPn_Fh_GAMnlYTG9fwkwHzBz", "JRuler.zip", 0.1f, "/JRuler/JRuler.exe", "A test for online downloads"));
+        
+        // TODO: Add more
+        
+        // For testing (ignore)
+        //listModel.addElement(new Item("Gimp", "https://drive.google.com/uc?export=download&id=1SDAzFry_VPn_Fh_GAMnlYTG9fwkwHzBz", "", 411f, "/JRuler/JRuler.exe", "Paint but better"));
         
         
         for(int i = 0; i < listModel.size(); i++) {

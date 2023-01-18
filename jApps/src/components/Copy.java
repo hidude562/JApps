@@ -30,6 +30,9 @@ public class Copy {
       this.item = item;
    }
    public void copyTo(String dir) throws IOException {
+     
+      boolean usbDetected = new File(item.getDirectory()).isFile();
+            
       // Start the progress bar
       
       ZipperProgress progress = new ZipperProgress(item);
@@ -39,25 +42,36 @@ public class Copy {
          boolean tempZipCreated = false;
          
          // TODO: Split network download and usb download into seperate methods
+         // Download from network only if its the only option or if the usb is not detected
          
-         if(item.getIfNetworkDownload()) {
+         boolean downloadingFromNetwork = false;
+         
+         if((item.getIfNetworkDownload() && !item.getIfUsbDownload()) || (!usbDetected && item.getIfNetworkDownload())) {
+            System.out.println("Downloading from the web..." );
+            downloadingFromNetwork = true;
             tempZipCreated = true;
-            System.out.println("HTTPS:");
             try {
                URL website = new URL(item.getURL());
                ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-               FileOutputStream fos = new FileOutputStream(item.getDirectory() + "temp.zip");
+               FileOutputStream fos = new FileOutputStream("C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/" + "temp.zip");
                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
                fos.close();
             }
             catch(IOException e) {
                System.out.println(e);
             }
+         } else {
+            System.out.println("Installing from usb... ");
          }
          
+         String zipLoc;
          
+         if(downloadingFromNetwork) {
+            zipLoc = "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/" + "temp.zip";  
+         } else {
+            zipLoc = item.getDirectory() + item.getZipName();
+         }
          
-         String zipLoc = item.getDirectory() + item.getZipName();
          System.out.println(zipLoc);
          String msg = "";
          

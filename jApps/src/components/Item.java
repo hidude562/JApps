@@ -21,6 +21,10 @@ public class Item {
    // type = 1: Roms files
    // type = 2: non-runnable application
    
+   
+   // Constructors for network OR USB downloads
+   
+   
    public Item(String displayName, String dir, String zipName, float fileSize, String exeLoc, String description) {
       this.displayName = displayName;
       this.dir = dir;
@@ -32,6 +36,7 @@ public class Item {
       autoDetect();
    }
    
+   // TODO: Merge the above and below constructor into one
    
    // For other types of files
    public Item(byte type, String displayName, String dir, String zipName, float fileSize, String description, String wildcard) {
@@ -52,17 +57,26 @@ public class Item {
    }
    
    
-   public Item(String displayName, String networkDir, String dir, String zipName, float fileSize, String exeLoc, String description) {
+   
+   // Constructors for network AND USB downloads
+   
+   public Item(String displayName, String urlDownload, String dir, String zipName, float fileSize, String exeLoc, String description) {
       this.displayName = displayName;
+      this.urlDownload = urlDownload;
+      
       this.dir = dir;
       this.zipName = zipName;
       this.fileSizeMB = fileSize;
       this.exeLoc = exeLoc;
       this.description = description;
       this.type = 0;
-      autoDetect();
+      
+      networkDownload = true;
+      usbDownload     = true;
    }
    
+   
+  
    
    private void autoDetect() {
       if(dir.length() > 4) {
@@ -76,11 +90,16 @@ public class Item {
       }
    }
    
+   
    public float getFileSize() {
       return fileSizeMB;
    }
    public boolean getIfNetworkDownload() {
       return networkDownload;
+   }
+   
+   public boolean getIfUsbDownload() {
+      return usbDownload;
    }
    
    public String getExeLoc() {
