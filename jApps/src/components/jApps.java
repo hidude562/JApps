@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 // TODO: Add uninstall feature
 // TODO: Network download if usb not detected
@@ -19,6 +20,9 @@ public class jApps extends JPanel
     private DefaultListModel tempList;
     private final JLabel title;
     private final JLabel description;
+    private final JLabel usbDetectedText;
+    
+    private boolean usbDetected = false;
     
     // TODO: Checkbox for network/USB downloads
     
@@ -43,7 +47,6 @@ public class jApps extends JPanel
         // Initialize layout
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setSelectedIndex(0);
         list.addListSelectionListener(this);
         list.setVisibleRowCount(15);
 
@@ -53,10 +56,8 @@ public class jApps extends JPanel
         search = new JTextField();
 
         InstallListener installListener = new InstallListener(installButton);
-        installButton.setActionCommand(installString);
         installButton.addActionListener(installListener);
-        installButton.setEnabled(true);
-
+        
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane,
                                            BoxLayout.LINE_AXIS));
@@ -101,14 +102,29 @@ public class jApps extends JPanel
         showApps.addActionListener(showListener);
         showRoms.addActionListener(showListener);
         showOther.addActionListener(showListener);
+        
 
         search.getDocument().addDocumentListener(new SearchListener());
         
+        // Top button pane
+        JPanel topButtonPane = new JPanel();
+        usbDetectedText = new JLabel();
+        
+        JButton refreshButton = new JButton("Refresh");
+        RefreshListener refreshListener = new RefreshListener(refreshButton);
+        refreshButton.addActionListener(refreshListener);
+        topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
+        
+        topButtonPane.add(refreshButton);
+        topButtonPane.add(usbDetectedText);
         
         add(listScrollPane, BorderLayout.CENTER);
         add(splitPane, BorderLayout.EAST);
         add(buttonPane, BorderLayout.PAGE_END);
+        add(topButtonPane, BorderLayout.PAGE_START);
         
+        sortList();
+        checkForUSB();
         updateDescription();
     }
 
@@ -116,7 +132,7 @@ public class jApps extends JPanel
         public void actionPerformed(ActionEvent actionEvent) {
             sortList();
         }
-    };
+     };
 
     class SearchListener implements DocumentListener {
         public void insertUpdate(DocumentEvent e) {
@@ -127,10 +143,8 @@ public class jApps extends JPanel
         }
         public void changedUpdate(DocumentEvent e) {}
     }
-
-    //This listener is shared by the text field and the install butlton.
-    class InstallListener implements ActionListener, DocumentListener {
-        private boolean alreadyEnabled = false;
+    
+    class InstallListener implements ActionListener {
         private final JButton button;
 
         public InstallListener(JButton button) {
@@ -150,17 +164,37 @@ public class jApps extends JPanel
             //Do whatever
             try {
                a.copyTo(item.getInstallLoc() + item.toString());
-               //progress.setToDone();
             } catch(Exception IOException) {
                JOptionPane.showMessageDialog(frame, "Error: " + IOException);  
             }
         }
+    }
+    
+    class RefreshListener implements ActionListener {
+        private boolean alreadyEnabled = false;
+        private final JButton button;
 
-        //Required by DocumentListener.
-        public void insertUpdate(DocumentEvent e) {}
-        public void removeUpdate(DocumentEvent e) {}
-        public void changedUpdate(DocumentEvent e) {}
+        public RefreshListener(JButton button) {
+            this.button = button;
+        }
 
+        // Called when Install button is pressed
+        public void actionPerformed(ActionEvent e) {
+            checkForUSB();
+            checkForNewApps();
+            sortList();
+        }
+    }
+    
+    private void checkForUSB() {
+      usbDetected = new File("D:/usbDetect.txt").isFile();
+      System.out.println(usbDetected);
+      usbDetectedText.setText("<html><p style=\"padding-left: 5px; padding-right: 5px; color: #9A9A9A\">" + (usbDetected ? "USB detected!" : "No USB found...") + "</p></html>");
+    }
+    
+    private void checkForNewApps() {
+      // TODO:
+      // When this is implemented, it will load the apps available from either the internet or USB
     }
 
     private boolean confirmDownload(Item item) {
@@ -221,23 +255,27 @@ public class jApps extends JPanel
             byte type = currentItem.getType();
 
             // Check if search query is in the current item
-            if(currentItem.toString().toUpperCase().contains(search.getText().toUpperCase())) {
-                if (type == 0) {
-                    if (showApps.isSelected()) {
-                        listModel.addElement(currentItem);
-                    }
-                } else if (type == 1) {
-                    if (showRoms.isSelected()) {
-                        listModel.addElement(currentItem);
-                    }
-                } else if (type == 2) {
-                    if (showOther.isSelected()) {
-                        listModel.addElement(currentItem);
-                    }
-                }
+            // Filter USB items if not detected
+            if((currentItem.getIfUsbDownload() && usbDetected) || currentItem.getIfNetworkDownload()) {
+               if(currentItem.toString().toUpperCase().contains(search.getText().toUpperCase())) {
+                   if (type == 0) {
+                       if (showApps.isSelected()) {
+                           listModel.addElement(currentItem);
+                       }
+                   } else if (type == 1) {
+                       if (showRoms.isSelected()) {
+                           listModel.addElement(currentItem);
+                       }
+                   } else if (type == 2) {
+                       if (showOther.isSelected()) {
+                           listModel.addElement(currentItem);
+                       }
+                   }
+               }
             }
 
         }
+        list.setSelectedIndex(0);
     }
 
     public void valueChanged(ListSelectionEvent e) {
