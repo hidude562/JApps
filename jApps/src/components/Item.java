@@ -9,7 +9,8 @@ public class Item {
    private String zipName;
    private String exeLoc;
    private String description;
-   private String installLoc = "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/";
+
+   private String installLoc = appConfig.INSTALL_DIRECTORY;
    private boolean networkDownload = false;
    private boolean usbDownload = true;
    private String urlDownload = "";
@@ -51,7 +52,7 @@ public class Item {
          System.out.println("WARNING: You set the type to be an application but you haven't set an exe location!");
       }
       if(type == 1) {
-         this.installLoc = "C:/Users/nathan.mills/Desktop/Games/";
+         this.installLoc = System.getProperty("user.home") + "/Desktop/Games/";
       }
       autoDetect();
    }
@@ -84,8 +85,8 @@ public class Item {
             networkDownload = true;
             usbDownload = false;
             urlDownload = dir;
-            dir = "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/";
-            zipName = "temp.zip";
+            dir = appConfig.INSTALL_DIRECTORY;
+            zipName = appConfig.TEMP_ZIP_NAME;
          }
       }
    }

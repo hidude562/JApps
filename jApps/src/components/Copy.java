@@ -1,26 +1,16 @@
 package components;
 
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import vbs_sc.ShortcutFactory;
 import java.net.URL;
-import java.io.InputStream;
-import java.nio.file.StandardCopyOption;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Channels;
 
@@ -53,7 +43,7 @@ public class Copy {
             try {
                URL website = new URL(item.getURL());
                ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-               FileOutputStream fos = new FileOutputStream("C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/" + "temp.zip");
+               FileOutputStream fos = new FileOutputStream(appConfig.INSTALL_DIRECTORY + appConfig.TEMP_ZIP_NAME);
                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
                fos.close();
             }
@@ -67,7 +57,7 @@ public class Copy {
          String zipLoc;
          
          if(downloadingFromNetwork) {
-            zipLoc = "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/" + "temp.zip";  
+            zipLoc = appConfig.INSTALL_DIRECTORY + appConfig.TEMP_ZIP_NAME;
          } else {
             zipLoc = item.getDirectory() + item.getZipName();
          }
