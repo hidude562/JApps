@@ -1,1 +1,43 @@
 # Java-app-installer
+
+### How to use (For mass distributing)
+Download the zip for the latest release from the 'releases' tab, then extract it on your usb. Once you do that, it is recommended for you to add a shortcut to the program on your flash drive so that the client can locate the app easier. The final neccesary thing to do is The app will probably be blocked so you may have to transfer it to a directory on the client's computer that apps can run (see <a href="https://github.com/api0cradle/UltimateAppLockerByPassList">this</a> for bypassing applocker). This process will be autonomized in the future via an HTA, which can be run, even with AppLocker turned on. Currently, the files on my flash drive are not posted anywhere so there's not to much to do.
+
+### How to use (For single client)
+Download the zip for the latest release from the 'releases' tab, then extract it to a directory where you are allowed to run apps, (see <a href="https://github.com/api0cradle/UltimateAppLockerByPassList">this</a>). Run jApps.exe and install whatever.
+
+<hr>
+
+### Create/compile your own custom distrobution
+
+#### Create your own distrobution
+Customizing the program in its current stage is difficult since it can't load the apps from a json, so I'd wait until a release with JSON compatibility comes so that adding more apps will be easier. But you can add your own custom apps by modifying the updateList() method in the jApps class. Most important things you may want to change is in the appConfig class.
+
+#### Create an executable for your new distrobution
+Compile your program and create a jar file with your IDE, then use a program like <a href="https://github.com/libgdx/packr">packr</a> to create the exe. Other jvm packagers will be a similar process but in this example, I'll be using packr.
+
+Create a JSON named config.json and put it whereever. Unless you've made massive changes, you shouldn't have to change much
+```
+{
+    "platform": "windows64",
+    "jdk": "C:/Program Files/Java/YOUR_JDK_VERSION!!!!",
+    "executable": "jApps",
+    "classpath": [
+        "C:/PATH/TO/YOUR/JAR/jApps2.jar"
+    ],
+    "mainclass": "components.jApps",
+    "vmargs": [
+       "Xmx1G"
+    ],
+    "minimizejre": "hard",
+    "output": "jApps"
+}
+```
+<br>
+
+Now run this cmd script in the same directory
+
+
+```java -jar packr-all-4.0.0.jar config.json```
+
+You now have your exe! You may want to create/download a miniature jre and replace the current one in the folder since your app is likely 200 MB+
