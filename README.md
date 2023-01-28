@@ -8,13 +8,13 @@ Download the zip for the latest release from the 'releases' tab, then extract it
 
 <hr>
 
-### Create/compile your own custom distrobution
+### Create/compile your own custom distribution
 
-#### Create your own distrobution
+#### Create your own distribution
 Customizing the program in its current stage is difficult since it can't load the apps from a json, so I'd wait until a release with JSON compatibility comes so that adding more apps will be easier. But you can add your own custom apps by modifying the updateList() method in the jApps class. Most important things you may want to change is in the appConfig class.
 
-#### Create an executable for your new distrobution
-Compile your program and create a jar file with your IDE, then use a program like <a href="https://github.com/libgdx/packr">packr</a> to create the exe. Other jvm packagers will be a similar process but in this example, I'll be using packr.
+#### Create an executable for your new distribution
+Compile your program and create a jar file with your IDE, then use a program like <a href="https://github.com/libgdx/packr">packr</a> or <a href="https://sourceforge.net/projects/launch4j/">launch4j</a> to create the exe (<b>note</b>: launch4j is easier to use, see this for <a href="https://launch4j.sourceforge.net/docs.html">how to use launch4j</a>  and this for <a href="https://stackoverflow.com/questions/7071133/how-to-bundle-a-jre-with-launch4j"> including the jre in your exe for launch4j</a>) Other jvm packagers will be a similar process but in this example, I'll be using packr.
 
 Create a JSON named config.json and put it whereever. Unless you've made massive changes, you shouldn't have to change much
 ```
