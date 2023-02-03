@@ -1,11 +1,13 @@
 package components;
+import java.lang.reflect.Constructor;
 
+import java.util.ArrayList;
 // TODO: Abstract class
 
 public class Item {
    private String displayName;
    private String dir;
-   private float fileSizeMB;
+   private double fileSizeMB;
    private String zipName;
    private String exeLoc;
    private String description;
@@ -26,7 +28,7 @@ public class Item {
    // Constructors for network OR USB downloads
    
    
-   public Item(String displayName, String dir, String zipName, float fileSize, String exeLoc, String description) {
+   public Item(String displayName, String dir, String zipName, Double fileSize, String exeLoc, String description) {
       this.displayName = displayName;
       this.dir = dir;
       this.zipName = zipName;
@@ -40,18 +42,19 @@ public class Item {
    // TODO: Merge the above and below constructor into one
    
    // For other types of files
-   public Item(byte type, String displayName, String dir, String zipName, float fileSize, String description, String wildcard) {
+   // This reads type as a double for JSON compatibility
+   public Item(Double type, String displayName, String dir, String zipName, Double fileSize, String description, String wildcard) {
       this.displayName = displayName;
       this.dir = dir;
       this.zipName = zipName;
       this.fileSizeMB = fileSize;
       this.exeLoc = null;
       this.description = description;
-      this.type = type;
-      if(type == 0) {
+      this.type = (byte) type.intValue();
+      if (type == 0) {
          System.out.println("WARNING: You set the type to be an application but you haven't set an exe location!");
       }
-      if(type == 1) {
+      if (type == 1) {
          this.installLoc = System.getProperty("user.home") + "/Desktop/Games/";
       }
       autoDetect();
@@ -61,7 +64,7 @@ public class Item {
    
    // Constructors for network AND USB downloads
    
-   public Item(String displayName, String urlDownload, String dir, String zipName, float fileSize, String exeLoc, String description) {
+   public Item(String displayName, String urlDownload, String dir, String zipName, Double fileSize, String exeLoc, String description) {
       this.displayName = displayName;
       this.urlDownload = urlDownload;
       
@@ -75,8 +78,35 @@ public class Item {
       networkDownload = true;
       usbDownload     = true;
    }
-   
-   
+
+   public Item() {}
+
+   public static Item convertToItem(ArrayList init) {
+      // Use the magic of reflection to programatically call a constructor based off an Arraylist
+      try {
+         Class<?> cl = Class.forName("components.Item");
+
+         // Copy all the types of init to a Class type
+         Class<?>[] type = new Class[init.size()];
+         for(int i = 0; i < init.size(); i++)
+            type[i] = init.get(i).getClass();
+
+         // Find a constructor that has these specific types
+         Constructor<?> cons = cl.getConstructor(type);
+
+         // Copy init to an Object array
+         Object[] obj = new Object[init.size()];
+         for(int i = 0; i < init.size(); i++)
+            obj[i] = init.get(i);
+
+         // Finally instance the constructor
+         Item newItem = (Item) cons.newInstance(obj);
+         return newItem;
+      } catch (Exception e) {
+         throw new RuntimeException(e);
+      }
+   }
+
   
    
    private void autoDetect() {
@@ -92,7 +122,7 @@ public class Item {
    }
    
    
-   public float getFileSize() {
+   public double getFileSize() {
       return fileSizeMB;
    }
    public boolean getIfNetworkDownload() {
