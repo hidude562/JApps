@@ -1,0 +1,103 @@
+{
+	"apps": [ 
+		[
+			"Blender",
+			"D:/",
+			"Blender.zip",
+			293.5,
+			"/Blender/blender.exe",
+			"A 3d modeling software"
+		],
+		[
+			"UnCiv",
+			"D:/",
+			"UnCiv.zip",
+			85.24,
+			"/UnCiv/Unciv.exe",
+			"A civilization building game, similar to the game Civilization 5, if you had heard of that game before."
+		],
+		[
+			"RetroArch",
+			"D:/",
+			"RetroArch.zip",
+			273.0,
+			"/RetroArch/RetroArch-Win64/retroarch.exe",
+			"With this software, you can emulate a lot of consoles, like the NES, PS1, and even the 3DS."
+		],
+		[
+			"Vim",
+			"D:/",
+			"Vim.zip",
+			18.7,
+			"/Vim/vim90/vim.exe",
+			"Notepad, but for smart people."
+		],
+		[
+			"Process Explorer",
+			"D:/",
+			"Process Explorer.zip",
+			3.1,
+			"/Process Explorer/procexp64.exe",
+			"Pretty much just Task Manager."
+		],
+		[
+			"InteliJ",
+			"D:/",
+			"InteliJ.zip",
+			830.0,
+			"/JetBrains/bin/idea64.exe",
+			"A Java IDE by the company 'JetBrains'"
+		],
+		[
+			"PyCharm",
+			"D:/",
+			"PyCharm.zip",
+			565.0,
+			"/JetBrains/bin/idea64.exe",
+			"A Python IDE by the company 'JetBrains' (IMPORTANT) You need to install Python from here for this to work!"
+		],
+		[
+			2,
+			"Python",
+			"D:/",
+			"Python3.10.zip",
+			14.5,
+			"You either love it or hate it, Python, (Version 3.10). You need this for Pycharm since the auto-installer will not work. Also installing libraries is really difficult since not only is pip not automatically installed. Not only that but also the package distrubution site is blocked!",
+			""
+		],
+		[
+			"Dolphin",
+			"D:/",
+			"Dolphin-x64.zip",
+			42.4,
+			"/Dolphin-x64/Dolphin.exe",
+			"A Nintendo Wii emulator, (IMPORTANT) This does not include any games! There are several games listed here and you can also find the files online.\n\nTo install games, open the app, and click 'Open'. Then navigate to your game file and select it. Then just click the icon and press 'Play' on the menu."
+		],
+		[
+			"Rollercoaster Tycoon 2",
+			"D:/",
+			"RCT2.zip",
+			50.0,
+			"/openrct2.exe",
+			"Build rollercoasters and stuff."
+		],
+		[
+			1,
+			"Mario Kart Wii",
+			"D:/",
+			"MarioKartWii.zip",
+			2210.0,
+			"(IMPORTANT) You must already have installed Dolphin for this to work (Look at the description for dolphin to see how to use this game file)! Mario Kart Wii, a racing game for the Wii",
+			""
+		],
+		[
+			"Notepad++",
+			"https://drive.google.com/uc?export=download&id=1HtVgcJAj2KOPVdm3RSZcwogp7oKIVTma",
+			"D:/",
+			"Notepad++.zip",
+			3.1,
+			"/Notepad++/notepad++.exe",
+			"Notepad, but better"
+		]
+	]
+}
