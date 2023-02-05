@@ -1,5 +1,5 @@
 
-// Credit: Pyro ()for this script
+// Credit: Pyro for this script
 // This class is used for loading a JSON and returning a JSONObject
 
 package com.JSONReader;
@@ -28,15 +28,14 @@ public class JSON {
             e.printStackTrace();
         }
         System.out.println("JSON file created: "+jsonObject);
-        setVars();
     }
 
     public static void checkJSON(String JSONPath) throws Exception {
         File JSONLocation = new File(JSONPath);
         if (JSONLocation.exists()){
-            readJSON();
+            readJSON(JSONPath);
         }else{
-            create();
+            create(JSONPath, JSONPath);
         }
     }
 
@@ -46,8 +45,5 @@ public class JSON {
         FileReader jsonReader = new FileReader(JSONFile);
         JSONObject json = (JSONObject) parser.parse(jsonReader);
         installLocation = (String) json.get("Install Location");
-    }
-    public static void main(String args[]) throws Exception {
-        checkJSON();
     }
 }
