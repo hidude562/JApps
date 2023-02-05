@@ -7,16 +7,12 @@ import javax.swing.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Map;
 
-import java.net.URL;
-import java.io.InputStream;
 import java.nio.file.Path;
 import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
 
 
 // TODO: Add uninstall feature
@@ -131,8 +127,8 @@ public class jApps extends JPanel
         add(buttonPane, BorderLayout.PAGE_END);
         add(topButtonPane, BorderLayout.PAGE_START);
 
-        sortList();
         checkForUSB();
+        sortList();
         updateDescription();
 
     }
