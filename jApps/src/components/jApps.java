@@ -47,6 +47,11 @@ public class jApps extends JPanel
         super(new BorderLayout());
 
         updateList();
+        try {
+            UIManager.setLookAndFeel(appConfig.lookAndFeel);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         // Initialize layout
         list = new JList(listModel);
@@ -117,9 +122,15 @@ public class jApps extends JPanel
         JButton refreshButton = new JButton("Refresh");
         RefreshListener refreshListener = new RefreshListener(refreshButton);
         refreshButton.addActionListener(refreshListener);
+
+        JButton optionsButton = new JButton(UIManager.getIcon("FileView.fileIcon"));
+        OptionListener optionsListener = new OptionListener();
+        optionsButton.addActionListener(optionsListener);
+
         topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
 
         topButtonPane.add(refreshButton);
+        topButtonPane.add(optionsButton);
         topButtonPane.add(usbDetectedText);
 
         add(listScrollPane, BorderLayout.CENTER);
@@ -175,6 +186,7 @@ public class jApps extends JPanel
         }
     }
 
+
     class RefreshListener implements ActionListener {
         private boolean alreadyEnabled = false;
         private final JButton button;
@@ -191,6 +203,13 @@ public class jApps extends JPanel
         }
     }
 
+    class OptionListener implements ActionListener {
+        // Called when Install button is pressed
+        public void actionPerformed(ActionEvent e) {
+            Options.newOptions();
+        }
+    }
+
     private void checkForUSB() {
         usbDetected = new File(appConfig.USB_NAME + appConfig.USB_DETECTOR_NAME).isFile();
         System.out.println(usbDetected);
@@ -198,7 +217,6 @@ public class jApps extends JPanel
     }
 
     private void checkForNewApps() {
-        // TODO:
         // This loads apps from the apps.json file in the root directory
         try {
             String content = Files.readString(Path.of(System.getProperty("user.dir") + "/apps.json"));
@@ -234,8 +252,6 @@ public class jApps extends JPanel
     }
 
     private void updateList() {
-        // TODO: Add network downloads for pre-existing items
-        // TODO: make usbName globally configurable
 		// Loads list items
 		
         listModel = new DefaultListModel();
