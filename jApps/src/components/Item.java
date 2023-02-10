@@ -16,6 +16,7 @@ public class Item {
    private boolean networkDownload = false;
    private boolean usbDownload = true;
    private String urlDownload = "";
+   private String asJson = "";
    
    // stores if it is a program, game iso, or something else
    private byte type;
@@ -37,6 +38,15 @@ public class Item {
       this.description = description;
       this.type = 0;
       autoDetect();
+
+      asJson =  "["
+              + "\"" + displayName + "\","
+              + "\"" + dir + "\","
+              + "\"" + zipName + "\","
+              + fileSize + ","
+              + "\"" + exeLoc + "\","
+              + "\"" + description.replaceAll("\n","\\n") + "\""
+              + "]";
    }
    
    // TODO: Merge the above and below constructor into one
@@ -58,6 +68,17 @@ public class Item {
          this.installLoc = System.getProperty("user.home") + "/Desktop/Games/";
       }
       autoDetect();
+
+      // TODO: do via reflection
+      asJson =  "["
+              +  type + ","
+              + "\"" + displayName + "\","
+              + "\"" + dir + "\","
+              + "\"" + zipName + "\","
+              +  fileSize + ","
+              + "\"" + description.replaceAll("\n","\\n") + "\","
+              + "\"" + wildcard + "\""
+              + "]";
    }
    
    
@@ -77,6 +98,16 @@ public class Item {
       
       networkDownload = true;
       usbDownload     = true;
+
+      asJson =  "["
+              + "\"" +  displayName + "\","
+              + "\"" + urlDownload + "\","
+              + "\"" + dir + "\","
+              + "\"" + zipName + "\","
+              + fileSize + ","
+              + "\"" + exeLoc + "\","
+              + "\"" + description.replaceAll("\n","\\n") + "\""
+              + "]";
    }
 
    public Item() {}
@@ -175,7 +206,11 @@ public class Item {
    public String getZipName() {
       return zipName;
    }
-   
+
+   public String getAsJson() {
+      return asJson;
+   }
+
    public String getInstallLoc() {
       return installLoc;
    }

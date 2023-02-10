@@ -85,13 +85,14 @@ public class appModifier extends JPanel {
         public void actionPerformed(ActionEvent e) {
             System.out.println("apply clicked");
             jApps.updateAppJson();
+            JOptionPane.showMessageDialog(null, "Restart the app to see your changes");
         }
     }
 
     class NewAppListener implements ActionListener {
         // Called when new app button is pressed
         public void actionPerformed(ActionEvent e) {
-            System.out.println("apply clicked");
+            Item newItem = NewAppWizard.newApp();
         }
     }
 

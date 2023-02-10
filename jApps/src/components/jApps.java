@@ -7,7 +7,9 @@ import javax.swing.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -212,9 +214,11 @@ public class jApps extends JPanel
         }
     }
     public void delete(int index) {
-        System.out.println("Removing at index " + index);
-        tempList.remove(index);
-        sortList();
+        if(tempList.size() > 0) {
+            System.out.println("Removing at index " + index);
+            tempList.remove(index);
+            sortList();
+        }
     }
 
     class OptionListener implements ActionListener {
@@ -234,7 +238,7 @@ public class jApps extends JPanel
         // This loads apps from the apps.json file in the root directory
         System.out.println("Reading json...");
         try {
-            String content = Files.readString(Path.of(System.getProperty("user.dir") + "/apps.json"));
+            String content = Files.readString(Path.of(System.getProperty("user.dir") + "/" + appConfig.appsConfig));
             Gson gson = new Gson();
             final ArrayList allItems = ((ArrayList) gson.fromJson(content, Map.class).get("apps"));
             for(int i = 0; i < allItems.size(); i++) {
@@ -333,6 +337,22 @@ public class jApps extends JPanel
     public static void updateAppJson() {
         // Update the internal json for storing apps as the current list
         // TODO:
+        String builtJson = "{\n" +
+                                "\t\"apps\": [\n";
+        for(int i = 0; i < tempList.size(); i++) {
+            builtJson += "\t\t\t\t" + ((Item) tempList.get(i)).getAsJson();
+            if(i != tempList.size() - 1)
+                builtJson += ",\n";
+        }
+        builtJson += "\n\t]\n" +
+                     "}";
+        System.out.println("Saving changes to app json...");
+
+        try {
+            Files.write(Paths.get(appConfig.appsConfig), builtJson.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void updateConfigJson() {
