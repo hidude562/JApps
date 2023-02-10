@@ -19,9 +19,9 @@ import com.google.gson.Gson;
 
 public class jApps extends JPanel
         implements ListSelectionListener {
-    private JList list;
-    private DefaultListModel listModel;
-    private DefaultListModel tempList;
+    public JList list;
+    public static DefaultListModel listModel;
+    public static DefaultListModel tempList;
     private final JLabel title;
     private final JLabel description;
     private final JLabel usbDetectedText;
@@ -34,17 +34,20 @@ public class jApps extends JPanel
     private final JCheckBox showRoms  = new JCheckBox("Display ROMS", true);
     private final JCheckBox showOther = new JCheckBox("Display 'Other'", true);
     private final JTextField search;
-
+    private final boolean isMainFrame;
     private final String usbName = appConfig.USB_NAME;
 
     //Create and set up the window.
-    private static final JFrame frame = new JFrame("jApps");
+    private static final JFrame frame = new JFrame(appConfig.appName);
 
     private static final String installString = "Install";
 
-    public jApps() {
+
+    // If isMainFrame, include install button and stuff
+    public jApps(boolean isMainFrame) {
         // TODO: Clean up the constructor
         super(new BorderLayout());
+        this.isMainFrame = isMainFrame;
 
         updateList();
         try {
@@ -78,7 +81,9 @@ public class jApps extends JPanel
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
         buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(installButton);
+
+        if(isMainFrame)
+            buttonPane.add(installButton);
         buttonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
 
@@ -123,20 +128,24 @@ public class jApps extends JPanel
         RefreshListener refreshListener = new RefreshListener(refreshButton);
         refreshButton.addActionListener(refreshListener);
 
-        JButton optionsButton = new JButton(UIManager.getIcon("FileView.fileIcon"));
+        // Example for built in imageicon, UIManager.getIcon("FileView.fileIcon")
+        JButton optionsButton = new JButton(new ImageIcon("src\\components\\images\\settings16px.png"));
         OptionListener optionsListener = new OptionListener();
         optionsButton.addActionListener(optionsListener);
 
         topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
 
         topButtonPane.add(refreshButton);
-        topButtonPane.add(optionsButton);
+
+        if(isMainFrame)
+            topButtonPane.add(optionsButton);
         topButtonPane.add(usbDetectedText);
 
         add(listScrollPane, BorderLayout.CENTER);
         add(splitPane, BorderLayout.EAST);
         add(buttonPane, BorderLayout.PAGE_END);
-        add(topButtonPane, BorderLayout.PAGE_START);
+        if(isMainFrame)
+            add(topButtonPane, BorderLayout.PAGE_START);
 
         checkForUSB();
         sortList();
@@ -202,6 +211,11 @@ public class jApps extends JPanel
             sortList();
         }
     }
+    public void delete(int index) {
+        System.out.println("Removing at index " + index);
+        tempList.remove(index);
+        sortList();
+    }
 
     class OptionListener implements ActionListener {
         // Called when Install button is pressed
@@ -218,6 +232,7 @@ public class jApps extends JPanel
 
     private void checkForNewApps() {
         // This loads apps from the apps.json file in the root directory
+        System.out.println("Reading json...");
         try {
             String content = Files.readString(Path.of(System.getProperty("user.dir") + "/apps.json"));
             Gson gson = new Gson();
@@ -251,23 +266,27 @@ public class jApps extends JPanel
         }
     }
 
-    private void updateList() {
-		// Loads list items
-		
-        listModel = new DefaultListModel();
+    private void setTempListToListModel() {
         tempList = new DefaultListModel();
-
-        // Load apps from json
-        checkForNewApps();
-
         for(int i = 0; i < listModel.size(); i++) {
             tempList.addElement(listModel.get(i));
         }
     }
 
+    private void updateList() {
+		// Loads list items
+		
+        listModel = new DefaultListModel();
+
+        // Load apps from json
+        checkForNewApps();
+        setTempListToListModel();
+    }
+
     private void sortList() {
         // Remove elements in listModel that do not follow the checkboxes criteria
         listModel.removeAllElements();
+        System.out.println("Sorting...");
 
         for (int i = 0; i < tempList.size(); i++) {
             Item currentItem = ((Item) tempList.get(i));
@@ -275,8 +294,8 @@ public class jApps extends JPanel
 
             // Check if search query is in the current item
             // Filter USB items if not detected
-            if((currentItem.getIfUsbDownload() && usbDetected) || currentItem.getIfNetworkDownload()) {
-                if(currentItem.toString().toUpperCase().contains(search.getText().toUpperCase())) {
+            if ((currentItem.getIfUsbDownload() && usbDetected) || currentItem.getIfNetworkDownload() || !isMainFrame) {
+                if (currentItem.toString().toUpperCase().contains(search.getText().toUpperCase())) {
                     if (type == 0) {
                         if (showApps.isSelected()) {
                             listModel.addElement(currentItem);
@@ -297,6 +316,13 @@ public class jApps extends JPanel
         list.setSelectedIndex(0);
     }
 
+    public JList getList() {
+        return list;
+    }
+    public void updateAppsConfig() {
+        System.out.println("Updating apps config (not implemented");
+    }
+
     public void valueChanged(ListSelectionEvent e) {
         // TODO: Stop double-updating the description
         try {
@@ -304,12 +330,35 @@ public class jApps extends JPanel
         } catch(Exception err) {}
     }
 
+    public static void updateAppJson() {
+        // Update the internal json for storing apps as the current list
+        // TODO:
+    }
+
+    public static void updateConfigJson() {
+        // Update the internal json for normal options as they are currently stored
+        // TODO:
+    }
+
+
+
+    // Returns a JScrollPane of all the apps
+    public JScrollPane listWidget() {
+        JScrollPane listScrollPane = new JScrollPane(list);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+
+        frame.add(listScrollPane, BorderLayout.CENTER);
+        frame.add(splitPane, BorderLayout.EAST);
+
+        return listScrollPane;
+    }
+
     // Create GUI
     private static void createAndShowGUI() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
-        JComponent newContentPane = new jApps();
+        JComponent newContentPane = new jApps(true);
         newContentPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(newContentPane);
 

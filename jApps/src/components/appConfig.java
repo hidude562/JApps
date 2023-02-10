@@ -8,6 +8,7 @@ public class appConfig {
     public static final String USB_NAME = "D:/";
     public static final String USB_DETECTOR_NAME = "usbDetect.txt";
     public static String lookAndFeel = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
+    public static String appName = "jApps";
 
     // Less important variables that you don't need to change...
     public static final String TEMP_ZIP_NAME = "temp.zip";

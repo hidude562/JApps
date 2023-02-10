@@ -11,16 +11,17 @@ import com.google.gson.Gson;
 
 // TODO: Add uninstall feature
 
-public class Options extends JPanel {
+public class appModifier extends JPanel {
     private DefaultListModel listModel;
     private DefaultListModel tempList;
 
     private final String usbName = appConfig.USB_NAME;
+    private jApps appChooser = new jApps(false);
 
     //Create and set up the window.
-    private static final JFrame frame = new JFrame("Options");
+    private static final JFrame frame = new JFrame("Edit apps");
 
-    public Options() {
+    public appModifier() {
         // TODO: Clean up the constructor
         super(new BorderLayout());
 
@@ -36,38 +37,39 @@ public class Options extends JPanel {
         ApplyListener applyListener = new ApplyListener(applyButton);
         applyButton.addActionListener(applyListener);
 
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane,
+        JPanel bottomButtonPane = new JPanel();
+        bottomButtonPane.setLayout(new BoxLayout(bottomButtonPane,
                 BoxLayout.LINE_AXIS));
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(applyButton);
-        buttonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        bottomButtonPane.add(Box.createHorizontalStrut(5));
+        bottomButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
+        bottomButtonPane.add(Box.createHorizontalStrut(5));
+        bottomButtonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
         JPanel contentPanel = new JPanel();
 
-        JLabel searchText = new JLabel("Other options...");
-        contentPanel.add(searchText);
+        JLabel searchText = new JLabel("Search");
+        contentPanel.add(appChooser);
 
         // Font ideas: Poor Richard
         //             Franklin Gothic Demi
 
         // Top button pane
-        JPanel topButtonPane = new JPanel();
 
-        JButton appModifierButton = new JButton("Add/remove apps from list");
-        AppModifierListener appModifierListener = new AppModifierListener();
-        appModifierButton.addActionListener(appModifierListener);
+        JButton newAppButton = new JButton("Add a new app");
+        NewAppListener newAppListener = new NewAppListener();
+        newAppButton.addActionListener(newAppListener);
+
+        JButton removeAppButton = new JButton("Remove an app");
+        RemoveAppListener removeAppListener = new RemoveAppListener();
+        removeAppButton.addActionListener(removeAppListener);
 
 
-        topButtonPane.add(appModifierButton);
-
-        topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
+        bottomButtonPane.add(newAppButton);
+        bottomButtonPane.add(removeAppButton);
+        bottomButtonPane.add(applyButton);
 
         add(contentPanel);
-        add(buttonPane, BorderLayout.PAGE_END);
-        add(topButtonPane, BorderLayout.PAGE_START);
+        add(bottomButtonPane, BorderLayout.PAGE_END);
     }
 
 
@@ -82,14 +84,24 @@ public class Options extends JPanel {
         // Called when Apply button is pressed
         public void actionPerformed(ActionEvent e) {
             System.out.println("apply clicked");
-            jApps.updateConfigJson();
+            jApps.updateAppJson();
         }
     }
 
-    class AppModifierListener implements ActionListener {
+    class NewAppListener implements ActionListener {
         // Called when new app button is pressed
         public void actionPerformed(ActionEvent e) {
-            appModifier.newAppModifier();
+            System.out.println("apply clicked");
+        }
+    }
+
+    class RemoveAppListener implements ActionListener {
+        // Called when new app button is pressed
+        public void actionPerformed(ActionEvent e) {
+            JList list = appChooser.getList();
+            int previousIndex = list.getSelectedIndex();
+            appChooser.delete(list.getSelectedIndex());
+            appChooser.list.setSelectedIndex(previousIndex);
         }
     }
 
@@ -98,7 +110,7 @@ public class Options extends JPanel {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         //Create and set up the content pane.
-        JComponent newContentPane = new Options();
+        JComponent newContentPane = new appModifier();
         newContentPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(newContentPane);
 
@@ -107,7 +119,7 @@ public class Options extends JPanel {
         frame.setVisible(true);
     }
 
-    public static void newOptions() {
+    public static void newAppModifier() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
