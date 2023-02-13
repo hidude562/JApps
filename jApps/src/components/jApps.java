@@ -28,7 +28,7 @@ public class jApps extends JPanel
     private final JLabel description;
     private final JLabel usbDetectedText;
 
-    private boolean usbDetected = false;
+    private static boolean usbDetected = false;
 
     // TODO: Checkbox for network/USB downloads
 
@@ -221,6 +221,11 @@ public class jApps extends JPanel
         }
     }
 
+    public void add(Item item) {
+        tempList.addElement(item);
+        sortList();
+    }
+
     class OptionListener implements ActionListener {
         // Called when Install button is pressed
         public void actionPerformed(ActionEvent e) {
@@ -322,9 +327,6 @@ public class jApps extends JPanel
 
     public JList getList() {
         return list;
-    }
-    public void updateAppsConfig() {
-        System.out.println("Updating apps config (not implemented");
     }
 
     public void valueChanged(ListSelectionEvent e) {

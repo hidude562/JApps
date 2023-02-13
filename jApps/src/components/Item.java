@@ -139,7 +139,7 @@ public class Item {
    }
 
   
-   
+   // Detects if USB or network download
    private void autoDetect() {
       if(dir.length() > 4) {
          if(dir.substring(0, 4).equals("http")) {

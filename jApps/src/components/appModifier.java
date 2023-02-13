@@ -92,7 +92,7 @@ public class appModifier extends JPanel {
     class NewAppListener implements ActionListener {
         // Called when new app button is pressed
         public void actionPerformed(ActionEvent e) {
-            Item newItem = NewAppWizard.newApp();
+            NewAppWizard.newApp(appChooser);
         }
     }
 
