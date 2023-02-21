@@ -5,9 +5,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.nio.file.Path;
-import com.google.gson.Gson;
-
 
 // TODO: Add uninstall feature
 
@@ -26,7 +23,7 @@ public class appModifier extends JPanel {
         super(new BorderLayout());
 
         try {
-            UIManager.setLookAndFeel(appConfig.lookAndFeel);
+            UIManager.setLookAndFeel(appConfig.LOOK_AND_FEEL);
         } catch (Exception e) {
             System.out.println(e);
         }

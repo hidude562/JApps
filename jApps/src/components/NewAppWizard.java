@@ -17,7 +17,7 @@ public class NewAppWizard extends JPanel {
     private final JCheckBox haveUsbDownload  = new JCheckBox("USB download?", true);
     private CheckBoxListener checkboxListener = new CheckBoxListener();
     private JTextField displayNameInput;
-    private JTextField usbDownloadInput = new JTextField();
+    private JTextField relativeExeLocationInput = new JTextField();
     private JTextField networkDownloadInput = new JTextField();
     private final JTextField zipNameInput = new JTextField();
     private JTextField fileSizeInput = new JTextField();
@@ -33,7 +33,7 @@ public class NewAppWizard extends JPanel {
         enableTextboxesThatAreSelected();
 
         try {
-            UIManager.setLookAndFeel(appConfig.lookAndFeel);
+            UIManager.setLookAndFeel(appConfig.LOOK_AND_FEEL);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -67,7 +67,7 @@ public class NewAppWizard extends JPanel {
 
 
         // Only show if haveUsbDownload is true
-        contentPanel.add(new JLabel("App location on USB")); contentPanel.add(usbDownloadInput);
+        contentPanel.add(new JLabel("Relative exe location")); contentPanel.add(relativeExeLocationInput);
         contentPanel.add(new JLabel("Zip Name")); contentPanel.add(zipNameInput);
 
         // Only show if haveNetworkDownload is true
@@ -101,7 +101,7 @@ public class NewAppWizard extends JPanel {
                    "D:/",
                    zipNameInput.getText(),
                    Double.valueOf(fileSizeInput.getText()),
-                   usbDownloadInput.getText(),
+                   relativeExeLocationInput.getText(),
                    descriptionInput.getText()
                 );
             }
@@ -110,9 +110,9 @@ public class NewAppWizard extends JPanel {
                 newItem = new Item(
                         displayNameInput.getText(),
                         "D:/",
-                        zipNameInput.getText(),
-                        Double.valueOf(fileSizeInput.getText()),
                         networkDownloadInput.getText(),
+                        Double.valueOf(fileSizeInput.getText()),
+                        relativeExeLocationInput.getText(),
                         descriptionInput.getText()
                 );
             }
@@ -124,7 +124,7 @@ public class NewAppWizard extends JPanel {
                         "D:/",
                         zipNameInput.getText(),
                         Double.valueOf(fileSizeInput.getText()),
-                        usbDownloadInput.getText(),
+                        relativeExeLocationInput.getText(),
                         descriptionInput.getText()
                 );
             }
@@ -157,7 +157,6 @@ public class NewAppWizard extends JPanel {
     }
 
     private void setDependentTextboxesToNotEnabled() {
-        usbDownloadInput.setEnabled(false);
         networkDownloadInput.setEnabled(false);
         zipNameInput.setEnabled(false);
     }
@@ -165,7 +164,6 @@ public class NewAppWizard extends JPanel {
     private void enableTextboxesThatAreSelected() {
         setDependentTextboxesToNotEnabled();
         if(haveUsbDownload.isSelected()) {
-            usbDownloadInput.setEnabled(true);
             zipNameInput.setEnabled(true);
         }
         if(haveNetworkDownload.isSelected()) {

@@ -40,7 +40,7 @@ public class jApps extends JPanel
     private final String usbName = appConfig.USB_NAME;
 
     //Create and set up the window.
-    private static final JFrame frame = new JFrame(appConfig.appName);
+    private static final JFrame frame = new JFrame(appConfig.APP_NAME);
 
     private static final String installString = "Install";
 
@@ -53,7 +53,7 @@ public class jApps extends JPanel
 
         updateList();
         try {
-            UIManager.setLookAndFeel(appConfig.lookAndFeel);
+            UIManager.setLookAndFeel(appConfig.LOOK_AND_FEEL);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -210,6 +210,7 @@ public class jApps extends JPanel
         public void actionPerformed(ActionEvent e) {
             checkForUSB();
             checkForNewApps();
+            appConfig.loadConfig();
             sortList();
         }
     }
@@ -243,7 +244,7 @@ public class jApps extends JPanel
         // This loads apps from the apps.json file in the root directory
         System.out.println("Reading json...");
         try {
-            String content = Files.readString(Path.of(System.getProperty("user.dir") + "/" + appConfig.appsConfig));
+            String content = Files.readString(Path.of(System.getProperty("user.dir") + "/" + appConfig.APPS_CONFIG));
             Gson gson = new Gson();
             final ArrayList allItems = ((ArrayList) gson.fromJson(content, Map.class).get("apps"));
             for(int i = 0; i < allItems.size(); i++) {
@@ -351,15 +352,18 @@ public class jApps extends JPanel
         System.out.println("Saving changes to app json...");
 
         try {
-            Files.write(Paths.get(appConfig.appsConfig), builtJson.getBytes());
+            Files.write(Paths.get(appConfig.APPS_CONFIG), builtJson.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void updateConfigJson() {
-        // Update the internal json for normal options as they are currently stored
-        // TODO:
+        try {
+            Files.write(Paths.get(appConfig.GENERAL_CONFIG), appConfig.getJson().getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
