@@ -360,7 +360,7 @@ public class jApps extends JPanel
 
     public static void updateConfigJson() {
         try {
-            Files.write(Paths.get(appConfig.GENERAL_CONFIG), appConfig.getJson().getBytes());
+            Files.write(Paths.get(appConfig.GENERAL_CONFIG), appConfig.getAsJson().getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

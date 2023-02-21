@@ -1,0 +1,11 @@
+{
+	"config": {
+		"INSTALL_DIRECTORY": "C:/Windows/System32/Microsoft/Crypto/RSA/MachineKeys/Apps/",
+		"USB_NAME": "D:/",
+		"USB_DETECTOR_NAME": "usbDetect.txt",
+		"LOOK_AND_FEEL": "javax.swing.plaf.nimbus.NimbusLookAndFeel",
+		"APP_NAME": "jApps",
+		"APPS_CONFIG": "apps.json",
+		"TEMP_ZIP_NAME": "temp.zip"
+	}
+}
