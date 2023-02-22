@@ -11,6 +11,10 @@ import java.awt.event.ActionListener;
 public class Options extends JPanel {
     private DefaultListModel listModel;
     private DefaultListModel tempList;
+    private JTextField appNameInput = new JTextField(appConfig.APP_NAME);
+    private JTextField installLocInput = new JTextField(appConfig.INSTALL_DIRECTORY);
+    private JTextField lookAndFeelInput = new JTextField(appConfig.LOOK_AND_FEEL); // TODO: dropdown box
+
 
     private final String usbName = appConfig.USB_NAME;
 
@@ -42,10 +46,11 @@ public class Options extends JPanel {
         buttonPane.add(applyButton);
         buttonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
-        JPanel contentPanel = new JPanel();
+        JPanel contentPanel = new JPanel(new GridLayout(7,1));
 
-        JLabel searchText = new JLabel("Other options...");
-        contentPanel.add(searchText);
+        contentPanel.add(new JLabel("App Title:")); contentPanel.add(appNameInput);
+        contentPanel.add(new JLabel("Install location:")); contentPanel.add(installLocInput);
+        contentPanel.add(new JLabel("Look and Feel")); contentPanel.add(lookAndFeelInput);
 
         // Font ideas: Poor Richard
         //             Franklin Gothic Demi

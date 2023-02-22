@@ -210,7 +210,6 @@ public class jApps extends JPanel
         public void actionPerformed(ActionEvent e) {
             checkForUSB();
             checkForNewApps();
-            appConfig.loadConfig();
             sortList();
         }
     }

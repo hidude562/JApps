@@ -39,10 +39,6 @@ public class appConfig {
         APPS_CONFIG = (String) allConfig.get("APPS_CONFIG");
         TEMP_ZIP_NAME = (String) allConfig.get("TEMP_ZIP_NAME");
     }
-
-    public static void loadConfig() {
-        System.out.println(APP_NAME);
-    }
     public static String getAsJson() {
         return "{\n\"config\": {"
                     + "\n\"INSTALL_DIRECTORY\": " + "\"" + INSTALL_DIRECTORY + "\","
