@@ -84,6 +84,11 @@ public class Options extends JPanel {
         // Called when Apply button is pressed
         public void actionPerformed(ActionEvent e) {
             System.out.println("apply clicked");
+
+            appConfig.LOOK_AND_FEEL = lookAndFeelInput.getText();
+            appConfig.INSTALL_DIRECTORY = installLocInput.getText();
+            appConfig.APP_NAME = appNameInput.getText();
+
             jApps.updateConfigJson();
         }
     }

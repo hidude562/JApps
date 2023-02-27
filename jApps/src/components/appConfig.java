@@ -11,14 +11,14 @@ import java.util.Map;
 
 public class appConfig {
 
-    public static final String INSTALL_DIRECTORY;
-    public static final String USB_NAME;
-    public static final String USB_DETECTOR_NAME;
-    public static final String LOOK_AND_FEEL;
-    public static final String APP_NAME;
-    public static final String APPS_CONFIG;
-    public static final String GENERAL_CONFIG = "generalConfig.json";
-    public static final String TEMP_ZIP_NAME;
+    public static String INSTALL_DIRECTORY;
+    public static String USB_NAME;
+    public static String USB_DETECTOR_NAME;
+    public static String LOOK_AND_FEEL;
+    public static String APP_NAME;
+    public static String APPS_CONFIG;
+    public static String GENERAL_CONFIG = "generalConfig.json";
+    public static String TEMP_ZIP_NAME;
 
     // Static initilizer that loads from a json
     static {
